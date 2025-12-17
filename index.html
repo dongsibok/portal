@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>시설관리 통합 포털</title>
+    <title>시설관리 포털</title>
     <style>
         * {
             margin: 0;
@@ -12,211 +12,223 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Malgun Gothic', sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
             padding: 20px;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
         }
 
+        /* 헤더 */
         header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: white;
             padding: 30px;
-            text-align: center;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #2563eb;
+            margin-bottom: 8px;
         }
 
-        header p {
-            font-size: 1.1em;
-            opacity: 0.9;
+        .subtitle {
+            font-size: 16px;
+            color: #666;
         }
 
+        /* 검색 */
         .search-box {
-            padding: 20px 30px;
-            background: #f8f9fa;
-            border-bottom: 1px solid #dee2e6;
+            background: white;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .search-input {
             width: 100%;
-            padding: 12px 20px;
-            font-size: 1em;
-            border: 2px solid #ddd;
-            border-radius: 25px;
-            outline: none;
-            transition: border-color 0.3s;
+            padding: 14px 18px;
+            font-size: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            transition: border 0.2s;
         }
 
         .search-input:focus {
-            border-color: #667eea;
+            outline: none;
+            border-color: #2563eb;
         }
 
+        /* 링크 목록 */
         #link-container {
-            padding: 30px;
+            display: grid;
+            gap: 20px;
         }
 
-        .loading {
-            text-align: center;
-            padding: 50px;
-            color: #666;
-            font-size: 1.2em;
-        }
-
-        .error {
-            text-align: center;
-            padding: 50px;
-            color: #dc3545;
-            font-size: 1.1em;
-        }
-
-        .category-group {
-            margin-bottom: 30px;
-            border: 1px solid #e0e0e0;
-            border-radius: 10px;
+        .category-section {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             overflow: hidden;
-            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        .category-group:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .category-title {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .category-header {
+            background: #2563eb;
             color: white;
-            font-size: 1.4em;
-            font-weight: bold;
-            padding: 15px 20px;
+            padding: 16px 24px;
+            font-size: 18px;
+            font-weight: 600;
         }
 
-        .category-content {
-            padding: 20px;
+        .links-list {
+            padding: 12px;
         }
 
         .link-item {
-            padding: 15px;
-            margin-bottom: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border-left: 4px solid #667eea;
-            transition: background 0.2s, transform 0.2s;
+            display: block;
+            padding: 16px 20px;
+            margin: 8px 0;
+            background: #f9fafb;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.2s;
+            border-left: 4px solid #2563eb;
         }
 
         .link-item:hover {
-            background: #e9ecef;
-            transform: translateX(5px);
+            background: #e5e7eb;
+            transform: translateX(4px);
         }
 
-        .link-item:last-child {
-            margin-bottom: 0;
+        .link-item:focus {
+            outline: 3px solid #2563eb;
+            outline-offset: 2px;
         }
 
-        .link-item a {
-            font-weight: bold;
-            color: #667eea;
-            text-decoration: none;
-            font-size: 1.1em;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+        .link-name {
+            font-size: 17px;
+            font-weight: 600;
+            color: #2563eb;
+            margin-bottom: 6px;
         }
 
-        .link-item a:hover {
-            color: #764ba2;
-            text-decoration: underline;
-        }
-
-        .link-item p {
-            margin-top: 8px;
+        .link-desc {
+            font-size: 15px;
             color: #666;
-            font-size: 0.95em;
-            line-height: 1.5;
         }
 
-        .external-icon::after {
-            content: '↗';
-            font-size: 0.8em;
-            opacity: 0.7;
-        }
-
-        .no-results {
+        /* 로딩/에러 */
+        .loading, .error, .no-results {
+            background: white;
+            padding: 60px 20px;
             text-align: center;
-            padding: 50px;
-            color: #999;
-            font-size: 1.1em;
-        }
-
-        .setup-instructions {
-            background: #fff3cd;
-            border: 1px solid #ffc107;
             border-radius: 8px;
-            padding: 20px;
-            margin: 20px 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .setup-instructions h3 {
-            color: #856404;
-            margin-bottom: 15px;
+        .loading {
+            color: #666;
+            font-size: 18px;
         }
 
-        .setup-instructions ol {
-            color: #856404;
-            margin-left: 20px;
+        .error {
+            color: #dc2626;
         }
 
-        .setup-instructions li {
-            margin-bottom: 10px;
+        .error-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .setup-box {
+            background: #fffbeb;
+            border: 2px solid #fbbf24;
+            border-radius: 8px;
+            padding: 24px;
+            margin: 24px 0;
+            text-align: left;
+        }
+
+        .setup-box h3 {
+            color: #92400e;
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+
+        .setup-box ol {
+            color: #92400e;
+            margin-left: 24px;
+        }
+
+        .setup-box li {
+            margin: 10px 0;
             line-height: 1.6;
         }
 
-        .setup-instructions code {
-            background: #fff;
+        .setup-box code {
+            background: white;
             padding: 2px 6px;
             border-radius: 3px;
-            font-family: 'Courier New', monospace;
+            font-family: monospace;
+            font-size: 14px;
         }
 
-        .setup-instructions pre {
-            background: #fff;
-            padding: 10px;
-            border-radius: 5px;
-            overflow-x: auto;
-            margin: 10px 0;
-        }
-
+        /* 푸터 */
         footer {
+            margin-top: 40px;
+            padding: 24px;
+            background: white;
+            border-radius: 8px;
             text-align: center;
-            padding: 20px;
-            background: #f8f9fa;
             color: #666;
-            font-size: 0.9em;
+            font-size: 14px;
         }
 
+        /* 반응형 */
         @media (max-width: 768px) {
-            header h1 {
-                font-size: 1.8em;
+            body {
+                padding: 12px;
             }
 
-            .category-title {
-                font-size: 1.2em;
+            h1 {
+                font-size: 24px;
             }
 
-            .link-item a {
-                font-size: 1em;
+            .search-box,
+            header {
+                padding: 20px;
+            }
+
+            .link-name {
+                font-size: 16px;
+            }
+
+            .link-desc {
+                font-size: 14px;
+            }
+        }
+
+        /* 접근성 */
+        *:focus {
+            outline: 3px solid #2563eb;
+            outline-offset: 2px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
             }
         }
     </style>
@@ -224,33 +236,33 @@
 <body>
     <div class="container">
         <header>
-            <h1>🏢 시설관리 통합 포털</h1>
-            <p>모든 시설관리 시스템을 한 곳에서</p>
+            <h1>시설관리 포털</h1>
+            <p class="subtitle">업무 시스템 바로가기</p>
         </header>
 
         <div class="search-box">
-            <input type="text" id="searchInput" class="search-input" placeholder="🔍 시스템 이름, 카테고리, 설명으로 검색...">
+            <input 
+                type="search" 
+                id="searchInput" 
+                class="search-input" 
+                placeholder="검색어를 입력하세요 (시스템명, 업무, 카테고리)"
+            >
         </div>
 
         <div id="link-container">
-            <p class="loading">데이터를 로드하는 중...</p>
+            <p class="loading">데이터를 불러오는 중...</p>
         </div>
 
         <footer>
-            <p>© 2024 시설관리부 | 문의사항은 IT 헬프데스크로 연락주세요</p>
+            시설관리 | 문의: 기획운영팀 (내선 5404)
         </footer>
     </div>
 
     <script>
-        // ===== 방법 1: Google Apps Script Web App 사용 (권장) =====
-        // Google Apps Script로 배포한 웹 앱 URL을 사용합니다.
-        // 아래 설정 가이드를 따라 WEB_APP_URL을 생성하세요.
+        // ===== 설정 =====
         const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxeE_LA7bXSM6Jjl9PhtagKcH-bPInsVWjnZRTbCosV0JrstRL78ZamxbIM98CTzzKY/exec';
-        
-        // ===== 방법 2: JSONP 방식 (백업) =====
-        // 만약 Apps Script를 사용할 수 없다면, 공개 CSV를 사용합니다.
         const SPREADSHEET_ID = '여기에_스프레드시트_ID_입력';
-        const USE_APPS_SCRIPT = true; // true로 변경하면 Apps Script 사용
+        const USE_APPS_SCRIPT = true;
 
         let allData = [];
 
@@ -258,26 +270,26 @@
         async function loadDataFromAppsScript() {
             try {
                 const response = await fetch(WEB_APP_URL);
+                if (!response.ok) throw new Error('데이터 로드 실패');
                 const data = await response.json();
                 allData = data;
                 displayData(allData);
             } catch (error) {
-                console.error('Error loading data:', error);
+                console.error('Error:', error);
                 displayError('apps-script');
             }
         }
 
-        // CSV로 데이터 로드 (CORS 우회)
+        // CSV로 데이터 로드
         async function loadDataFromCSV() {
             try {
-                // Google Sheets를 CSV로 export
                 const CSV_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv`;
                 const response = await fetch(CSV_URL);
+                if (!response.ok) throw new Error('데이터 로드 실패');
                 const text = await response.text();
                 
-                // CSV 파싱
                 const lines = text.split('\n');
-                allData = lines.slice(1) // 헤더 제외
+                allData = lines.slice(1)
                     .filter(line => line.trim())
                     .map(line => {
                         const values = parseCSVLine(line);
@@ -292,12 +304,12 @@
 
                 displayData(allData);
             } catch (error) {
-                console.error('Error loading data:', error);
+                console.error('Error:', error);
                 displayError('csv');
             }
         }
 
-        // CSV 라인 파싱 (쉼표가 포함된 필드 처리)
+        // CSV 파싱
         function parseCSVLine(line) {
             const result = [];
             let current = '';
@@ -305,7 +317,6 @@
             
             for (let i = 0; i < line.length; i++) {
                 const char = line[i];
-                
                 if (char === '"') {
                     inQuotes = !inQuotes;
                 } else if (char === ',' && !inQuotes) {
@@ -316,20 +327,19 @@
                 }
             }
             result.push(current.trim());
-            
             return result;
         }
 
-        // 데이터 표시 함수
+        // 데이터 표시
         function displayData(data) {
             const container = document.getElementById('link-container');
             
             if (data.length === 0) {
-                container.innerHTML = '<p class="no-results">검색 결과가 없습니다.</p>';
+                container.innerHTML = '<p class="no-results">검색 결과가 없습니다</p>';
                 return;
             }
 
-            // 카테고리별로 그룹화
+            // 카테고리별 그룹화
             const categories = {};
             data.forEach(item => {
                 if (!categories[item.category]) {
@@ -342,14 +352,17 @@
             let html = '';
             for (const [category, items] of Object.entries(categories)) {
                 html += `
-                    <div class="category-group">
-                        <div class="category-title">${category}</div>
-                        <div class="category-content">
+                    <div class="category-section">
+                        <div class="category-header">${category}</div>
+                        <div class="links-list">
                             ${items.map(item => `
-                                <div class="link-item">
-                                    <a href="${item.url}" target="_blank" class="external-icon">${item.name}</a>
-                                    <p>${item.description}</p>
-                                </div>
+                                <a href="${item.url}" 
+                                   target="_blank" 
+                                   rel="noopener noreferrer"
+                                   class="link-item">
+                                    <div class="link-name">${item.name}</div>
+                                    <div class="link-desc">${item.description}</div>
+                                </a>
                             `).join('')}
                         </div>
                     </div>
@@ -359,21 +372,20 @@
             container.innerHTML = html;
         }
 
-        // 에러 표시 함수
+        // 에러 표시
         function displayError(method) {
             const container = document.getElementById('link-container');
             
-            let instructions = '';
-            
+            let guide = '';
             if (method === 'apps-script') {
-                instructions = `
-                    <div class="setup-instructions">
-                        <h3>📋 Google Apps Script 설정 가이드</h3>
+                guide = `
+                    <div class="setup-box">
+                        <h3>설정 필요: Google Apps Script</h3>
                         <ol>
-                            <li><strong>Google Sheets 열기:</strong> 데이터가 있는 스프레드시트 열기</li>
-                            <li><strong>Apps Script 에디터 열기:</strong> 확장 프로그램 → Apps Script</li>
-                            <li><strong>코드 입력:</strong> 아래 코드를 복사하여 붙여넣기
-<pre>function doGet() {
+                            <li>Google Sheets 열기 → 확장 프로그램 → Apps Script</li>
+                            <li>아래 코드 붙여넣기:
+<pre style="background: white; padding: 12px; border-radius: 4px; overflow: auto; margin: 8px 0;">
+function doGet() {
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   const data = sheet.getDataRange().getValues();
   const headers = data[0];
@@ -390,65 +402,57 @@
   return ContentService
     .createTextOutput(JSON.stringify(result))
     .setMimeType(ContentService.MimeType.JSON);
-}</pre>
+}
+</pre>
                             </li>
-                            <li><strong>배포:</strong> 배포 → 새 배포 → 유형: 웹 앱 → 액세스 권한: "모든 사용자" → 배포</li>
-                            <li><strong>URL 복사:</strong> 생성된 웹 앱 URL을 복사</li>
-                            <li><strong>HTML 수정:</strong> <code>WEB_APP_URL</code> 변수에 URL 입력</li>
-                            <li><strong>USE_APPS_SCRIPT:</strong> <code>true</code>로 변경</li>
+                            <li>배포 → 새 배포 → 웹 앱 → 액세스: "모든 사용자"</li>
+                            <li>생성된 URL을 <code>WEB_APP_URL</code>에 입력</li>
                         </ol>
                     </div>
                 `;
             } else {
-                instructions = `
-                    <div class="setup-instructions">
-                        <h3>📋 CSV 방식 설정 가이드</h3>
+                guide = `
+                    <div class="setup-box">
+                        <h3>설정 필요: CSV 방식</h3>
                         <ol>
-                            <li><strong>Google Sheets 공유:</strong> 파일 → 공유 → "링크가 있는 모든 사용자" → 뷰어</li>
-                            <li><strong>스프레드시트 ID 복사:</strong> URL에서 ID 부분 복사
-                                <br><code>https://docs.google.com/spreadsheets/d/<strong>ID_부분</strong>/edit</code>
-                            </li>
-                            <li><strong>HTML 수정:</strong> <code>SPREADSHEET_ID</code> 변수에 ID 입력</li>
-                            <li><strong>웹 서버 사용:</strong> 로컬 파일이 아닌 웹 서버에서 실행
-                                <ul style="margin-top: 5px;">
-                                    <li>간단한 Python 서버: <code>python -m http.server 8000</code></li>
-                                    <li>접속: <code>http://localhost:8000/facility-portal.html</code></li>
-                                </ul>
-                            </li>
+                            <li>Google Sheets 공유 → "링크가 있는 모든 사용자"</li>
+                            <li>URL에서 스프레드시트 ID 복사</li>
+                            <li><code>SPREADSHEET_ID</code>에 ID 입력</li>
+                            <li>웹 서버에서 실행 필요</li>
                         </ol>
-                        <p style="margin-top: 15px; padding: 10px; background: #fff; border-radius: 5px;">
-                            <strong>💡 권장:</strong> Apps Script 방식이 더 안정적입니다. CORS 문제가 없고 JSON 형식으로 깔끔하게 데이터를 받을 수 있습니다.
-                        </p>
                     </div>
                 `;
             }
             
             container.innerHTML = `
                 <div class="error">
-                    <p>⚠️ 데이터 로딩에 실패했습니다.</p>
-                    <p style="margin-top: 10px; font-size: 0.9em;">아래 설정 가이드를 확인해주세요.</p>
+                    <div class="error-title">데이터를 불러올 수 없습니다</div>
+                    <p>아래 설정을 완료해주세요</p>
                 </div>
-                ${instructions}
+                ${guide}
             `;
         }
 
         // 검색 기능
+        let searchTimeout;
         document.getElementById('searchInput').addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase();
-            
-            if (searchTerm === '') {
-                displayData(allData);
-            } else {
-                const filtered = allData.filter(item => 
-                    item.category.toLowerCase().includes(searchTerm) ||
-                    item.name.toLowerCase().includes(searchTerm) ||
-                    item.description.toLowerCase().includes(searchTerm)
-                );
-                displayData(filtered);
-            }
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                const term = e.target.value.toLowerCase().trim();
+                if (term === '') {
+                    displayData(allData);
+                } else {
+                    const filtered = allData.filter(item => 
+                        item.category.toLowerCase().includes(term) ||
+                        item.name.toLowerCase().includes(term) ||
+                        item.description.toLowerCase().includes(term)
+                    );
+                    displayData(filtered);
+                }
+            }, 300);
         });
 
-        // 페이지 로드 시 데이터 가져오기
+        // 초기 로드
         if (USE_APPS_SCRIPT) {
             loadDataFromAppsScript();
         } else {
