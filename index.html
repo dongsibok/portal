@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>시설관리 대시보드</title>
+    <title>시설관리 스마트 포털</title>
     <style>
         :root {
             --primary: #2563eb;
@@ -14,19 +14,15 @@
             --text-main: #1e293b;
             --text-sub: #64748b;
             --border: #e2e8f0;
+            --accent: #f59e0b; /* 즐겨찾기 및 공지 강조색 */
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
             font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Malgun Gothic', sans-serif;
             background: var(--bg-main);
             color: var(--text-main);
-            line-height: 1.6;
             display: flex;
             height: 100vh;
             overflow: hidden;
@@ -50,99 +46,79 @@
             scroll-behavior: smooth;
         }
 
-        /* 사이드바 디자인 */
-        .brand {
-            margin-bottom: 40px;
-            padding-left: 10px;
+        /* 브랜드 섹션 */
+        .brand { margin-bottom: 40px; }
+        .brand h1 { font-size: 22px; color: var(--primary); font-weight: 800; }
+        .brand p { font-size: 12px; color: var(--text-sub); margin-top: 4px; }
+
+        /* 공지사항 대시보드 */
+        .notice-banner {
+            background: #fffbeb;
+            border: 1px solid #fef3c7;
+            border-left: 5px solid var(--accent);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            position: relative;
         }
 
-        .brand h1 {
-            font-size: 22px;
-            color: var(--primary);
-            font-weight: 800;
+        .notice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
         }
 
-        .brand p {
-            font-size: 13px;
-            color: var(--text-sub);
-        }
-
-        .nav-label {
+        .notice-tag {
+            background: var(--accent);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 6px;
             font-size: 12px;
             font-weight: 700;
-            color: var(--text-sub);
-            text-transform: uppercase;
-            margin-bottom: 15px;
-            padding-left: 10px;
         }
 
-        #category-nav {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .nav-btn {
-            display: block;
+        .notice-content { font-size: 14px; line-height: 1.6; color: #92400e; }
+        
+        #notice-input {
             width: 100%;
-            text-align: left;
-            padding: 12px 15px;
-            border: none;
-            background: none;
+            padding: 12px;
+            border: 1px solid var(--accent);
             border-radius: 8px;
-            color: var(--text-main);
-            font-weight: 500;
+            display: none;
+            font-family: inherit;
+            margin-top: 10px;
+        }
+
+        .admin-btn {
+            font-size: 12px;
+            padding: 4px 12px;
+            background: white;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            border-radius: 6px;
             cursor: pointer;
             transition: all 0.2s;
         }
 
-        .nav-btn:hover {
-            background: var(--primary-light);
-            color: var(--primary);
-        }
+        .admin-btn:hover { background: var(--accent); color: white; }
 
-        /* 메인 헤더 및 검색 */
-        header {
-            max-width: 1100px;
-            margin: 0 auto 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .search-box {
-            position: relative;
-            width: 400px;
-        }
-
+        /* 검색 바 */
         .search-input {
             width: 100%;
-            padding: 14px 20px;
-            font-size: 15px;
+            padding: 15px 25px;
+            font-size: 16px;
             border: 1px solid var(--border);
-            border-radius: 12px;
-            background: white;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-            transition: all 0.2s;
-        }
-
-        .search-input:focus {
+            border-radius: 14px;
+            margin-bottom: 40px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
         }
+        .search-input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-light); }
 
-        /* 콘텐츠 그리드 */
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .category-section {
-            margin-bottom: 50px;
-        }
-
-        .category-header {
+        /* 카드 그리드 */
+        .category-section { margin-bottom: 50px; }
+        .category-title {
             font-size: 20px;
             font-weight: 700;
             margin-bottom: 20px;
@@ -150,14 +126,7 @@
             align-items: center;
             gap: 10px;
         }
-
-        .category-header::before {
-            content: '';
-            width: 4px;
-            height: 20px;
-            background: var(--primary);
-            border-radius: 2px;
-        }
+        .category-title::before { content: ''; width: 4px; height: 18px; background: var(--primary); border-radius: 2px; }
 
         .links-grid {
             display: grid;
@@ -169,164 +138,207 @@
             background: var(--card-bg);
             padding: 24px;
             border-radius: 16px;
-            text-decoration: none;
-            color: var(--text-main);
             border: 1px solid var(--border);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
         }
 
         .link-card:hover {
             transform: translateY(-5px);
             border-color: var(--primary);
-            box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 12px 20px -5px rgba(0,0,0,0.1);
         }
 
+        /* 항목 부각 디자인 */
         .link-name {
-            font-size: 18px;
-            font-weight: 700;
+            display: inline-block;
+            font-size: 17px;
+            font-weight: 800;
             color: var(--primary);
-            margin-bottom: 8px;
+            margin-bottom: 12px;
+            padding: 4px 12px;
+            background: var(--primary-light);
+            border-radius: 8px;
+            width: fit-content;
+            transition: all 0.2s;
         }
 
-        .link-desc {
-            font-size: 14px;
-            color: var(--text-sub);
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+        .link-card:hover .link-name {
+            background: var(--primary);
+            color: white;
         }
 
-        /* 상태 표시 */
-        .loading, .no-results {
-            text-align: center;
-            padding: 100px 0;
-            color: var(--text-sub);
-        }
+        .link-desc { font-size: 14px; color: var(--text-sub); line-height: 1.5; }
 
-        /* 반응형 */
-        @media (max-width: 1024px) {
-            .sidebar { width: 240px; }
-            .search-box { width: 300px; }
+        .fav-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 22px;
+            cursor: pointer;
+            color: #e2e8f0;
+            transition: color 0.2s;
         }
+        .fav-btn.active { color: var(--accent); }
+
+        /* 사이드바 메뉴 */
+        .nav-btn {
+            display: block; width: 100%; text-align: left; padding: 12px 15px;
+            border: none; background: none; border-radius: 8px; cursor: pointer;
+            font-weight: 500; color: var(--text-main); margin-bottom: 4px;
+        }
+        .nav-btn:hover { background: var(--primary-light); color: var(--primary); }
 
         @media (max-width: 768px) {
-            body { flex-direction: column; }
-            .sidebar { width: 100%; height: auto; padding: 20px; border-right: none; border-bottom: 1px solid var(--border); }
+            .sidebar { display: none; }
             .main-content { padding: 20px; }
-            header { flex-direction: column; gap: 20px; align-items: flex-start; }
-            .search-box { width: 100%; }
-            #category-nav { display: none; } /* 모바일은 사이드바 메뉴 생략 */
         }
     </style>
 </head>
 <body>
     <aside class="sidebar">
         <div class="brand">
-            <h1>시설관리 포털</h1>
-            <p>Vision & Specialization</p>
+            <h1>시설관리 Portal</h1>
+            <p>함께보는 세상, 더 맑은 미래</p>
         </div>
-        
-        <div class="nav-label">Categories</div>
-        <nav id="category-nav">
-            </nav>
-
-        <footer style="margin-top: auto; padding-top: 20px; font-size: 12px; color: #94a3b8; border-top: 1px solid #f1f5f9;">
-            문의: 기획운영팀 (내선 5404)
+        <p style="font-size: 11px; font-weight: 700; color: var(--text-sub); margin-bottom: 15px; padding-left: 10px; letter-spacing: 0.1em;">CATEGORY</p>
+        <nav id="category-nav"></nav>
+        <footer style="margin-top: auto; font-size: 12px; color: var(--text-sub); border-top: 1px solid var(--border); pt: 20px;">
+            기획운영팀 | 내선 5404
         </footer>
     </aside>
 
     <main class="main-content">
-        <header>
-            <h2 style="font-size: 26px; font-weight: 800;">시스템 바로가기</h2>
-            <div class="search-box">
-                <input type="search" id="searchInput" class="search-input" placeholder="시스템 또는 업무 검색...">
+        <div class="notice-banner">
+            <div class="notice-header">
+                <span class="notice-tag">NOTICE</span>
+                <div>
+                    <button class="admin-btn" id="edit-btn" onclick="toggleEditNotice()">수정하기</button>
+                    <button class="admin-btn" id="save-btn" style="display:none;" onclick="saveNotice()">저장하기</button>
+                </div>
             </div>
-        </header>
+            <div id="notice-display" class="notice-content">
+                환영합니다! 이곳에 오늘의 주요 일정이나 공지사항을 입력하세요.
+            </div>
+            <textarea id="notice-input" rows="3"></textarea>
+        </div>
 
-        <div id="link-container" class="container">
-            <p class="loading">데이터를 불러오는 중입니다...</p>
+        <input type="search" id="searchInput" class="search-input" placeholder="업무 시스템 또는 카테고리 검색...">
+
+        <div id="link-container">
+            <p style="text-align: center; color: var(--text-sub); padding: 50px;">데이터를 불러오는 중...</p>
         </div>
     </main>
 
     <script>
+        // 여기에 Apps Script 웹 앱 URL을 넣으세요
         const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxeE_LA7bXSM6Jjl9PhtagKcH-bPInsVWjnZRTbCosV0JrstRL78ZamxbIM98CTzzKY/exec';
+        
         let allData = [];
+        let favorites = JSON.parse(localStorage.getItem('fav_portal') || '[]');
 
-        async function loadData() {
+        // 초기 로드
+        window.onload = () => {
+            const savedNotice = localStorage.getItem('portal_notice_text');
+            if(savedNotice) document.getElementById('notice-display').innerText = savedNotice;
+            fetchData();
+        };
+
+        async function fetchData() {
             try {
                 const response = await fetch(WEB_APP_URL);
-                if (!response.ok) throw new Error('로드 실패');
                 allData = await response.json();
-                displayData(allData);
+                render();
             } catch (error) {
-                console.error(error);
-                document.getElementById('link-container').innerHTML = '<p class="no-results">데이터를 불러오지 못했습니다. 설정을 확인하세요.</p>';
+                document.getElementById('link-container').innerHTML = '<p style="color:red; text-align:center;">데이터 로드 실패. URL을 확인하세요.</p>';
             }
         }
 
-        function displayData(data) {
+        // 공지 수정 로직
+        function toggleEditNotice() {
+            document.getElementById('notice-display').style.display = 'none';
+            document.getElementById('notice-input').style.display = 'block';
+            document.getElementById('notice-input').value = document.getElementById('notice-display').innerText;
+            document.getElementById('edit-btn').style.display = 'none';
+            document.getElementById('save-btn').style.display = 'inline-block';
+        }
+
+        function saveNotice() {
+            const newText = document.getElementById('notice-input').value;
+            localStorage.setItem('portal_notice_text', newText);
+            document.getElementById('notice-display').innerText = newText;
+            document.getElementById('notice-display').style.display = 'block';
+            document.getElementById('notice-input').style.display = 'none';
+            document.getElementById('edit-btn').style.display = 'inline-block';
+            document.getElementById('save-btn').style.display = 'none';
+        }
+
+        // 즐겨찾기 로직
+        function toggleFav(name, e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const idx = favorites.indexOf(name);
+            if(idx > -1) favorites.splice(idx, 1);
+            else favorites.push(name);
+            localStorage.setItem('fav_portal', JSON.stringify(favorites));
+            render();
+        }
+
+        function render(filtered = null) {
+            const data = filtered || allData;
             const container = document.getElementById('link-container');
             const nav = document.getElementById('category-nav');
             
-            if (data.length === 0) {
-                container.innerHTML = '<p class="no-results">검색 결과가 없습니다.</p>';
-                return;
+            const categories = data.reduce((acc, item) => {
+                if(!acc[item.category]) acc[item.category] = [];
+                acc[item.category].push(item);
+                return acc;
+            }, {});
+
+            let html = '';
+
+            // 1. 즐겨찾기 (검색 중 아닐 때만)
+            if(!filtered && favorites.length > 0) {
+                const favItems = allData.filter(i => favorites.includes(i.name));
+                html += `<div class="category-section"><div class="category-title">⭐ 자주 찾는 업무</div><div class="links-grid">${favItems.map(i => createCard(i)).join('')}</div></div>`;
             }
 
-            // 카테고리 그룹화
-            const categories = {};
-            data.forEach(item => {
-                if (!categories[item.category]) categories[item.category] = [];
-                categories[item.category].push(item);
-            });
-
-            // 메인 콘텐츠 생성
-            let contentHtml = '';
-            let navHtml = '';
-
-            for (const [category, items] of Object.entries(categories)) {
-                const safeId = category.replace(/\s+/g, '-'); // ID 생성용
-                
-                navHtml += `<button class="nav-btn" onclick="document.getElementById('${safeId}').scrollIntoView({behavior: 'smooth'})">${category}</button>`;
-                
-                contentHtml += `
-                    <div class="category-section" id="${safeId}">
-                        <div class="category-header">${category}</div>
-                        <div class="links-grid">
-                            ${items.map(item => `
-                                <a href="${item.url}" target="_blank" rel="noopener" class="link-card">
-                                    <div>
-                                        <div class="link-name">${item.name}</div>
-                                        <div class="link-desc">${item.description || ''}</div>
-                                    </div>
-                                    <div style="margin-top: 15px; font-size: 12px; color: var(--primary); font-weight: 600;">접속하기 →</div>
-                                </a>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
+            // 2. 카테고리별 섹션
+            for (const [cat, items] of Object.entries(categories)) {
+                html += `<div class="category-section" id="cat-${cat}"><div class="category-title">${cat}</div><div class="links-grid">${items.map(i => createCard(i)).join('')}</div></div>`;
             }
 
-            container.innerHTML = contentHtml;
-            nav.innerHTML = navHtml;
+            container.innerHTML = html || '<p style="text-align:center; color:var(--text-sub);">검색 결과가 없습니다.</p>';
+            
+            // 사이드바 업데이트
+            nav.innerHTML = Object.keys(categories).map(cat => `
+                <button class="nav-btn" onclick="document.getElementById('cat-${cat}').scrollIntoView({behavior:'smooth'})">${cat}</button>
+            `).join('');
+        }
+
+        function createCard(item) {
+            const isFav = favorites.includes(item.name);
+            return `
+                <a href="${item.url}" target="_blank" class="link-card">
+                    <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav('${item.name}', event)">★</button>
+                    <div class="link-name">${item.name}</div>
+                    <div class="link-desc">${item.description || '상세 설명이 등록되지 않았습니다.'}</div>
+                </a>
+            `;
         }
 
         // 실시간 검색
         document.getElementById('searchInput').addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
-            const filtered = allData.filter(item => 
-                item.category.toLowerCase().includes(term) ||
-                item.name.toLowerCase().includes(term) ||
-                item.description.toLowerCase().includes(term)
-            );
-            displayData(filtered);
+            const filtered = allData.filter(i => i.name.toLowerCase().includes(term) || i.category.toLowerCase().includes(term));
+            render(term ? filtered : null);
         });
-
-        loadData();
     </script>
 </body>
 </html>
